@@ -1,12 +1,11 @@
-/**
-* Testes da aula dia 16/08/2019
-* @author Rauf L. F. Rodrigues
-* @author 
-* @author
-* @version 21 ago. 2019
-*/
+package br.pucrs.tp;
 
-enum Categoria {Silver, Gold, Platinum}
+/**
+* Trabalho 4 - Testes Unitários
+* @author Rauf L. F. Rodrigues
+* @author Tiago Luz
+* @author Lennon da Silva Rocha
+*/
 
 public class ContaCorrente
 {
@@ -88,5 +87,11 @@ public class ContaCorrente
         }
         
         return false;
-    }    
+    }
+
+    public static void main(String args[])
+    {
+        ContaCorrente contaCorrente = new ContaCorrente("21300-4", "Leno");
+        System.out.println("Conta: " + contaCorrente.getNumeroConta() +  " - Correntista: " + contaCorrente.getNomeCorrentista());
+    }
 }
