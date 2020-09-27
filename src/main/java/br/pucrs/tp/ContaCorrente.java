@@ -71,8 +71,8 @@ public class ContaCorrente
         if (valor <= 0) {
             return false; //atenção para testar essa condição
         }
-        if ((saldo - valor) < 0) {
-            saldo = 0; // atenção para testar esta condição
+        if ((saldo - valor) < 0) {            
+            return false;
         }
         saldo -= valor;
         if (categoria == Categoria.Platinum && saldo < 100000) {
