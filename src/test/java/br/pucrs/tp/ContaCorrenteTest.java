@@ -23,8 +23,8 @@ public class ContaCorrenteTest
     @Test
     public void stillSilver()
     {
-        Categoria result = conta.getCategoria();
         conta.deposito(49999);
+        Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Silver, result);
     }
 
