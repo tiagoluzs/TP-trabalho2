@@ -51,20 +51,16 @@ public class ContaCorrente
                 categoria = Categoria.Gold;
                 return true;
             }
-            if (saldo >= 200000) {
-                categoria = Categoria.Platinum;
-                return true;
-            }
         }
 
-        if (categoria == Categoria.Gold) {
+        else if (categoria == Categoria.Gold) {
             saldo += valor + (valor*0.01);
             if (saldo >= 200000) {
                 categoria = Categoria.Platinum;
             }
         }
 
-        if (categoria == Categoria.Platinum) {
+        else if (categoria == Categoria.Platinum) {
             saldo += valor + (valor*0.025);
         }
         return true;
@@ -82,7 +78,7 @@ public class ContaCorrente
         if (categoria == Categoria.Platinum && saldo < 100000) {
             categoria = Categoria.Gold;
         }
-        if (categoria == Categoria.Gold && saldo < 25000) {
+        else if (categoria == Categoria.Gold && saldo < 25000) {
             categoria = Categoria.Silver;
         }
         
