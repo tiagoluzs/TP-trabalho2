@@ -1,4 +1,7 @@
+package br.pucrs.tp;
+
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ContaCorrenteTest {
@@ -22,19 +25,19 @@ public class ContaCorrenteTest {
     // testing limit values on the threshold (or limit values) between silver and gold, in this case, should return gold after the deposit;
     // entering the deposit of $50000 should change the category to gold
     @Test
-    public void silverToGold(){
-        Categoria result = conta.getCategoria();
+    public void silverToGold(){        
         conta.deposito(50000);
+        Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Gold, result);
     }
 
     // testing limit values on the threshold (or limit values) between gold and platinum, in this case, should return gold after the deposit;
     // entering the deposit of $148513,87 (plus 1%, which is 1485,13) should still maintain the gold category
     @Test
-    public void stillGold(){
-        Categoria result = conta.getCategoria();
+    public void stillGold(){        
         conta.deposito(50000);
         conta.deposito(148513.87);
+        Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Gold, result);
 
     }
@@ -42,10 +45,10 @@ public class ContaCorrenteTest {
     // testing limit values on the threshold (or limit values) between gold and platinum, in this case, should return platinum after the deposit;
     // entering the deposit of $148514,86 (plus 1%, which is $1485,14) should change the category to platinum
     @Test
-    public void goldToPlatinum(){
-        Categoria result = conta.getCategoria();
+    public void goldToPlatinum(){        
         conta.deposito(50000);
         conta.deposito(148514.86);
+        Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Platinum, result);
     }
 
@@ -53,19 +56,19 @@ public class ContaCorrenteTest {
     // testing to see if category will not change more than once per deposit
     //entering the deposit of $200000 should not change from silver to platinum, instead, should still change just to gold
     @Test
-    public void noChangeFromSilverToPlatinum(){
-        Categoria result = conta.getCategoria();
+    public void noChangeFromSilverToPlatinum(){        
         conta.deposito(200000);
+        Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Gold, result);
     }
 
     // testing to see if the category will not change to platinum after a big deposit, instead to gold, but change to platinum after a proper deposit
     //entering the deposit of $200000 should not change from silver to platinum, instead, should still change just to gold, but after a deposit of $1 it should change to platinum
     @Test
-    public void twoDepositsToChangeToPlatinum(){
-        Categoria result = conta.getCategoria();
+    public void twoDepositsToChangeToPlatinum(){        
         conta.deposito(200000);
         conta.deposito(1);
+        Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Platinum, result);
     }
 
@@ -73,32 +76,32 @@ public class ContaCorrenteTest {
     // testing limit values on the threshold (or limit values) between platinum and gold, in this case, should return platinum after the withdraw;
     //lowering the balance to 100000 should not change the category to gold, instead, it should still be platinum
     @Test
-    public void stillPlatinum(){
-        Categoria result = conta.getCategoria();
+    public void stillPlatinum(){        
         conta.deposito(50000);
         conta.deposito(150000);
         conta.retirada(100000);
+        Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Platinum, result);
     }
 
     // testing limit values on the threshold (or limit values) between platinum and gold, in this case, should return gold after the withdraw;
     //lowering the balance to $99999 should change the category to gold
     @Test
-    public void PlatinumToGold(){
-        Categoria result = conta.getCategoria();
+    public void PlatinumToGold(){        
         conta.deposito(50000);
         conta.deposito(150000);
         conta.retirada(100001);
+        Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Gold, result);
     }
 
     // testing limit values on the threshold (or limit values) between gold and silver, in this case, should still return gold after the withdraw;
     //lowering the balance to $25000 should not change the category to silver
     @Test
-    public void mantainGold(){
-        Categoria result = conta.getCategoria();
+    public void mantainGold(){        
         conta.deposito(50000);        
         conta.retirada(25000);
+        Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Gold, result);
     }
 
@@ -106,9 +109,9 @@ public class ContaCorrenteTest {
     //lowering the balance to $24999 should change the category to silver
     @Test
     public void goldToSilver(){
-        Categoria result = conta.getCategoria();
         conta.deposito(50000);
         conta.retirada(25001);
+        Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Silver, result);
     }
 
@@ -116,23 +119,23 @@ public class ContaCorrenteTest {
     // testing to see if category will not change more than once per withdraw
     //lowering the balance to $24999 should not change from platinum to silver, instead, should still change just to gold
     @Test
-    public void noChangeFromPlatinumToSilver(){
-        Categoria result = conta.getCategoria();
+    public void noChangeFromPlatinumToSilver(){        
         conta.deposito(50000);
         conta.deposito(150000);
         conta.retirada(125001);
+        Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Gold, result);
     }
 
     // testing to see if the category will not change to platinum after a big withdraw, instead to gold, but change to silver after a proper withdraw
     //lowering the balance to $24999 should not change from platinum to silver, but after another withdraw of $1 it should change to silver
     @Test
-    public void twoWithdrawsToChangeToSilver(){
-        Categoria result = conta.getCategoria();
+    public void twoWithdrawsToChangeToSilver(){        
         conta.deposito(50000);
         conta.deposito(150000);
         conta.retirada(125001);
         conta.retirada(1);
+        Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Silver, result);
     }
     //--------------- Testing deposits values---------------
