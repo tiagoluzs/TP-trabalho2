@@ -133,8 +133,8 @@ public class ContaCorrenteTest {
     public void twoWithdrawsToChangeToSilver(){        
         conta.deposito(50000);
         conta.deposito(150000);
-        conta.retirada(125001);
-        conta.retirada(1);
+        conta.retirada(180000);
+        conta.retirada(1);        
         Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Silver, result);
     }
