@@ -86,7 +86,7 @@ public class ContaCorrente
             categoria = Categoria.Silver;
         }
         
-        return false;
+        return true;
     }
 
     public static void main(String args[])
