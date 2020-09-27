@@ -90,7 +90,7 @@ public class ContaCorrenteTest {
     public void PlatinumToGold(){        
         conta.deposito(50000);
         conta.deposito(150000);
-        conta.retirada(100001);
+        conta.retirada(120000);
         Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Gold, result);
     }
