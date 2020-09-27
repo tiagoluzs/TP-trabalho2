@@ -85,7 +85,7 @@ public class ContaCorrenteTest {
     }
 
     // testing limit values on the threshold (or limit values) between platinum and gold, in this case, should return gold after the withdraw;
-    //lowering the balance to $99999 should change the category to gold
+    //lowering the balance below $100000 should change the category to gold
     @Test
     public void PlatinumToGold(){        
         conta.deposito(50000);
@@ -142,29 +142,29 @@ public class ContaCorrenteTest {
     //testing to see if the deposit is working as silver category
     //depositing $10000 should change the balance to $10000
     @Test
-    public void balanceDepositAsSilver(){
-        double result = conta.getSaldo();
+    public void balanceDepositAsSilver(){        
         conta.deposito(10000);
+        double result = conta.getSaldo();
         Assertions.assertEquals(10000, result);
     }
     //testing to see if the deposit is working as gold category
     //depositing $10000, based of $50000, should change the balance to $60100
     @Test
-    public void balanceDepositAsGold(){
-        double result = conta.getSaldo();
+    public void balanceDepositAsGold(){        
         conta.deposito(50000);
         conta.deposito(10000);
+        double result = conta.getSaldo();
         Assertions.assertEquals(60100, result);
     }
     //testing to see if the deposit is working as platinum category
-    //depositing $10000, based of $200000, should change the balance to $200250
+    //depositing $10000, based of $200000, should change the balance to $210250
     @Test
     public void balanceDepositAsPlatinum(){
-        double result = conta.getSaldo();
         conta.deposito(50000);
         conta.deposito(148514.86);
         conta.deposito(10000);
-        Assertions.assertEquals(200250, result);
+        double result = Math.abs(210250-conta.getSaldo());
+        Assertions.assertTrue(result<0.01);
     }
 
     //--------------- Testing invalid values---------------
