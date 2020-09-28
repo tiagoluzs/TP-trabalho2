@@ -60,8 +60,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
@@ -69,7 +67,14 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.7-SNAPSHOT</version>
+          <version>0.8.5</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>prepare-agent</goal>
+                <goal>report</goal></goals>
+            </execution>
+          </executions>
         </plugin>
 
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
@@ -93,6 +98,7 @@
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
+          <configuration><argLine>@{argLine}</argLine></configuration>
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
