@@ -61,31 +61,14 @@
 		</dependency>
 	</dependencies>
 
-
   <build>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+    <pluginManagement>
       <plugins>
 
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>0.8.5</version>
-          <executions>
-            <execution>
-                <id>jacoco-initialize</id>
-                <goals>
-                    <goal>prepare-agent</goal>
-                </goals>
-            </execution>
-            <!-- generate fancy html report -->
-            <execution>
-                <id>jacoco-site</id>
-                <phase>package</phase>
-                <goals>
-                    <goal>report</goal>
-                </goals>
-            </execution>
-        </executions>
         </plugin>
 
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
@@ -109,24 +92,6 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-
-          <executions>
-            <execution>
-                <phase>test</phase>
-            </execution>
-          </executions>
-          <configuration>
-           <!-- disable parallel execution so that JaCoCo listener can properly work -->
-            <parallel>none</parallel>
-            <perCoreThreadCount>false</perCoreThreadCount>
-            <forkCount>1</forkCount>
-            <properties>
-              <property>
-                <name>listener</name>
-                <value>org.sonar.java.jacoco.JUnitListener</value>
-              </property>
-            </properties>
-          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
