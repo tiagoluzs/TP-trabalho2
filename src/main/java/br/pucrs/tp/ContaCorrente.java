@@ -84,10 +84,4 @@ public class ContaCorrente
         
         return true;
     }
-
-    public static void main(String args[])
-    {
-        ContaCorrente contaCorrente = new ContaCorrente("21300-4", "Leno");
-        System.out.println("Conta: " + contaCorrente.getNumeroConta() +  " - Correntista: " + contaCorrente.getNomeCorrentista());
-    }
 }

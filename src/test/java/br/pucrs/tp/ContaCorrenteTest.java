@@ -13,7 +13,14 @@ public class ContaCorrenteTest
     @BeforeEach
     public void initialize()
     {
-        conta = new ContaCorrente("test", "0000");
+        conta = new ContaCorrente("0000", "test");
+    }
+
+    @Test
+    public void checkAccountConstruct()
+    {
+        Assertions.assertEquals("test", conta.getNomeCorrentista());
+        Assertions.assertEquals("0000", conta.getNumeroConta());
     }
 
     //------------------Testing category change--------------------
