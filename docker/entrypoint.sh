@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-echo 'Compilando e executando testes..'
-mvn test
+echo 'Executando testes e cobertura de código..'
+mvn test verify
 echo 'Sucesso!'
 
 exec "$@"
