@@ -45,23 +45,27 @@ public class ContaCorrente
             return false; //atenção para testar essa condição
         }
 
-        if (categoria == Categoria.Silver) {
-            saldo += valor;
-            if (saldo >= 50000) {
-                categoria = Categoria.Gold;
-                return true;
-            }
-        }
+        switch (this.categoria) {
+ 
+            case Silver:
+                saldo += valor;
+                if (saldo >= 50000) {
+                    categoria = Categoria.Gold;
+                    return true;
+                }
+                break;
 
-        else if (categoria == Categoria.Gold) {
-            saldo += valor + (valor*0.01);
-            if (saldo >= 200000) {
-                categoria = Categoria.Platinum;
-            }
-        }
+            case Gold:
+                saldo += valor + (valor*0.01);
+                if (saldo >= 200000) {
+                    categoria = Categoria.Platinum;
+                }
+                break;
 
-        else if (categoria == Categoria.Platinum) {
-            saldo += valor + (valor*0.025);
+            case Platinum:
+            default:
+                saldo += valor + (valor*0.025);
+                break;
         }
         return true;
     }
@@ -83,11 +87,5 @@ public class ContaCorrente
         }
         
         return true;
-    }
-
-    public static void main(String args[])
-    {
-        ContaCorrente contaCorrente = new ContaCorrente("21300-4", "Leno");
-        System.out.println("Conta: " + contaCorrente.getNumeroConta() +  " - Correntista: " + contaCorrente.getNomeCorrentista());
     }
 }

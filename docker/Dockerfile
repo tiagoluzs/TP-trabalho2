@@ -5,4 +5,4 @@ WORKDIR /app
 
 # Executa script de inicialização
 ENTRYPOINT [ "/app/docker/entrypoint.sh" ]
-CMD [ "mvn", "exec:java" ]
+#CMD [ "mvn", "exec:java" ]

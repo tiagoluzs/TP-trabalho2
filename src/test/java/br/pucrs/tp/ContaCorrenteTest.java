@@ -1,11 +1,14 @@
 package br.pucrs.tp;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
-
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class ContaCorrenteTest
 {
@@ -25,130 +28,75 @@ public class ContaCorrenteTest
 
     //------------------Testing category change--------------------
     //---- testing change in the category based on deposit ----
-    // testing limit values on the threshold (or limit values) between silver and gold, in this case, should return silver after the deposit;
-    // entering the deposit of $49999 should still maintain the silver category
-    @Test
-    public void stillSilver()
+    @ParameterizedTest
+    @MethodSource("arguments_singleDeposit")
+    public void testCategory_singleDeposit(double depositValue, Categoria expectedCategory)
     {
-        conta.deposito(49999);
-        Categoria result = conta.getCategoria();
-        Assertions.assertEquals(Categoria.Silver, result);
+        conta.deposito(depositValue);
+        Assertions.assertEquals(conta.getCategoria(), expectedCategory);
     }
 
-    // testing limit values on the threshold (or limit values) between silver and gold, in this case, should return gold after the deposit;
-    // entering the deposit of $50000 should change the category to gold
-    @Test
-    public void silverToGold()
-    {        
-        conta.deposito(50000);
-        Categoria result = conta.getCategoria();
-        Assertions.assertEquals(Categoria.Gold, result);
+    private static Stream<Arguments> arguments_singleDeposit() {
+	    return Stream.of(
+	      Arguments.of(49999, Categoria.Silver), // Entering the deposit of $49999 should still maintain the silver category
+	      Arguments.of(50000, Categoria.Gold), // Entering the deposit of $50000 should change the category to gold
+	      Arguments.of(200000, Categoria.Gold) // Entering the deposit of $200000 should not change from silver to platinum, instead, should still change just to gold
+	    );
+	}
+
+    @ParameterizedTest
+    @MethodSource("arguments_twoDeposit")
+    public void testCategory_twoDeposit(double firstDepositValue, double secondDepositValue, Categoria expectedCategory)
+    {
+        conta.deposito(firstDepositValue);
+        conta.deposito(secondDepositValue);
+        Assertions.assertEquals(conta.getCategoria(), expectedCategory);
     }
 
-    // testing limit values on the threshold (or limit values) between gold and platinum, in this case, should return gold after the deposit;
-    // entering the deposit of $148513,87 (plus 1%, which is 1485,13) should still maintain the gold category
-    @Test
-    public void stillGold()
-    {        
-        conta.deposito(50000);
-        conta.deposito(148513.87);
-        Categoria result = conta.getCategoria();
-        Assertions.assertEquals(Categoria.Gold, result);
-
-    }
-    
-    // testing limit values on the threshold (or limit values) between gold and platinum, in this case, should return platinum after the deposit;
-    // entering the deposit of $148514,86 (plus 1%, which is $1485,14) should change the category to platinum
-    @Test
-    public void goldToPlatinum()
-    {        
-        conta.deposito(50000);
-        conta.deposito(148514.86);
-        Categoria result = conta.getCategoria();
-        Assertions.assertEquals(Categoria.Platinum, result);
-    }
-
-    //---- testing change in the category based on amount deposited ----
-    // testing to see if category will not change more than once per deposit
-    //entering the deposit of $200000 should not change from silver to platinum, instead, should still change just to gold
-    @Test
-    public void noChangeFromSilverToPlatinum()
-    {        
-        conta.deposito(200000);
-        Categoria result = conta.getCategoria();
-        Assertions.assertEquals(Categoria.Gold, result);
-    }
-
-    // testing to see if the category will not change to platinum after a big deposit, instead to gold, but change to platinum after a proper deposit
-    //entering the deposit of $200000 should not change from silver to platinum, instead, should still change just to gold, but after a deposit of $1 it should change to platinum
-    @Test
-    public void twoDepositsToChangeToPlatinum()
-    {        
-        conta.deposito(200000);
-        conta.deposito(1);
-        Categoria result = conta.getCategoria();
-        Assertions.assertEquals(Categoria.Platinum, result);
-    }
+    private static Stream<Arguments> arguments_twoDeposit() {
+	    return Stream.of(
+	      Arguments.of(49999.0, 148513.87, Categoria.Gold), // Entering the deposit of $148513,87 (plus 1%, which is 1485,13) should still maintain the gold category
+	      Arguments.of(50000.0, 148514.86, Categoria.Platinum), // Entering the deposit of $148514,86 (plus 1%, which is $1485,14) should change the category to platinum
+	      Arguments.of(200000.0, 1.0, Categoria.Platinum) // Entering the deposit of $200000 should not change from silver to platinum, instead, should still change just to gold, but after a deposit of $1 it should change to platinum
+	    );
+	}
 
     //---- testing change in the category based on withdraw ----
-    // testing limit values on the threshold (or limit values) between platinum and gold, in this case, should return platinum after the withdraw;
-    //lowering the balance to 100000 should not change the category to gold, instead, it should still be platinum
-    @Test
-    public void stillPlatinum()
-    {        
-        conta.deposito(50000);
-        conta.deposito(150000);
-        conta.retirada(100000);
-        Categoria result = conta.getCategoria();
-        Assertions.assertEquals(Categoria.Platinum, result);
-    }
-
-    // testing limit values on the threshold (or limit values) between platinum and gold, in this case, should return gold after the withdraw;
-    //lowering the balance below $100000 should change the category to gold
-    @Test
-    public void PlatinumToGold()
-    {        
-        conta.deposito(50000);
-        conta.deposito(150000);
-        conta.retirada(120000);
-        Categoria result = conta.getCategoria();
-        Assertions.assertEquals(Categoria.Gold, result);
-    }
-
-    // testing limit values on the threshold (or limit values) between gold and silver, in this case, should still return gold after the withdraw;
-    //lowering the balance to $25000 should not change the category to silver
-    @Test
-    public void mantainGold()
-    {        
-        conta.deposito(50000);        
-        conta.retirada(25000);
-        Categoria result = conta.getCategoria();
-        Assertions.assertEquals(Categoria.Gold, result);
-    }
-
-    //testing limit values on the threshold (or limit values) between gold and silver, in this case, should return silver after the withdraw;
-    //lowering the balance to $24999 should change the category to silver
-    @Test
-    public void goldToSilver()
+    @ParameterizedTest
+    @MethodSource("arguments_oneDepositOneWithdraw")
+    public void testCategory_oneDepositOneWithdraw(double depositValue, double withdrawValue, Categoria expectedCategory)
     {
-        conta.deposito(50000);
-        conta.retirada(25001);
-        Categoria result = conta.getCategoria();
-        Assertions.assertEquals(Categoria.Silver, result);
+        conta.deposito(depositValue);
+        conta.retirada(withdrawValue);
+        Assertions.assertEquals(conta.getCategoria(), expectedCategory);
     }
 
-    //---- testing change in the category based on amount withdrawn ----
-    // testing to see if category will not change more than once per withdraw
-    //lowering the balance to $24999 should not change from platinum to silver, instead, should still change just to gold
-    @Test
-    public void noChangeFromPlatinumToSilver()
-    {        
-        conta.deposito(50000);
-        conta.deposito(150000);
-        conta.retirada(125001);
-        Categoria result = conta.getCategoria();
-        Assertions.assertEquals(Categoria.Gold, result);
+    private static Stream<Arguments> arguments_oneDepositOneWithdraw()
+    {
+	    return Stream.of(
+	      Arguments.of(50000.0, 25000.0, Categoria.Gold), // Lowering the balance to $25000 should not change the category to silver
+	      Arguments.of(50000.0, 25001.0, Categoria.Silver) // Lowering the balance to $24999 should change the category to silver
+	    );
+	}
+
+    @ParameterizedTest
+    @MethodSource("arguments_twoDepositOneWithdraw")
+    public void testCategory_twoDepositOneWithdraw(double firstDepositValue, double secondDepositValue, double withdrawValue, Categoria expectedCategory)
+    {
+        conta.deposito(firstDepositValue);
+        conta.deposito(secondDepositValue);
+        conta.retirada(withdrawValue);
+        Assertions.assertEquals(conta.getCategoria(), expectedCategory);
     }
+
+    private static Stream<Arguments> arguments_twoDepositOneWithdraw()
+    {
+	    return Stream.of(
+	      Arguments.of(50000.0, 150000.0, 100000.0, Categoria.Platinum), // Lowering the balance to 100000 should not change the category to gold, instead, it should still be platinum
+	      Arguments.of(50000.0, 150000.0, 120000.0, Categoria.Gold), // Lowering the balance below $100000 should change the category to gold
+	      Arguments.of(50000.0, 150000.0, 180000.0, Categoria.Gold) // Lowering the balance to $20000 should not change from platinum to silver, instead, should still change just to gold
+	    );
+	}
 
     // testing to see if the category will not change to platinum after a big withdraw, instead to gold, but change to silver after a proper withdraw
     //lowering the balance to $24999 should not change from platinum to silver, but after another withdraw of $1 it should change to silver
@@ -162,6 +110,7 @@ public class ContaCorrenteTest
         Categoria result = conta.getCategoria();
         Assertions.assertEquals(Categoria.Silver, result);
     }
+
     //--------------- Testing deposits values---------------
     //testing to see if the deposit is working as silver category
     //depositing $10000 should change the balance to $10000
@@ -190,8 +139,8 @@ public class ContaCorrenteTest
         conta.deposito(50000);
         conta.deposito(148514.86);
         conta.deposito(10000);
-        double result = Math.abs(210250-conta.getSaldo());
-        Assertions.assertTrue(result<0.01);
+        double result = Math.abs(210250 - conta.getSaldo());
+        Assertions.assertTrue(result < 0.01);
     }
 
     //--------------- Testing invalid values---------------
@@ -221,7 +170,9 @@ public class ContaCorrenteTest
     public void moreThanICanTake()
     {
         conta.deposito(100);
-        conta.retirada(101);
+        boolean withdraw = conta.retirada(101);
+        Assertions.assertFalse(withdraw);
+
         double result = conta.getSaldo();
         Assertions.assertEquals(100, result);
     }
